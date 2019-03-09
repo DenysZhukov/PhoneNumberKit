@@ -39,7 +39,6 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         didSet {
             partialFormatter.defaultRegion = defaultRegion
             setRegionPlaceholderIfNeeded()
-
         }
     }
     
