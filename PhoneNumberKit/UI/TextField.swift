@@ -49,7 +49,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         placeholder = partialFormatter.formatPartial(example)
     }
     
-    var customPlaceholder: String? {
+    public var customPlaceholder: String? {
         didSet {
             guard let custom = customPlaceholder else {
                 setRegionPlaceholderIfNeeded()
@@ -59,7 +59,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         }
     }
     
-    var isRawNumberOnly: Bool = false
+    public var isRawNumberOnly: Bool = false
 
     internal func updateMaxDigitsIfNeeded() {
         if isRawNumberOnly, let metadata = partialFormatter.currentMetadata {
