@@ -43,7 +43,13 @@ public final class PartialFormatter {
     func updateMetadataForDefaultRegion() {
         guard let metadataManager = metadataManager else { return }
         if let regionMetadata = metadataManager.territoriesByCountry[defaultRegion] {
-            defaultMetadata = metadataManager.mainTerritory(forCode: regionMetadata.countryCode)
+            var code = regionMetadata.countryCode
+            if let leading = regionMetadata.leadingDigits,
+                let leadingValue = UInt64(leading) {
+                let degree: Int = Int(pow(10.0, Double(leading.count)))
+                code = code * UInt64(degree) + leadingValue
+            }
+            defaultMetadata = metadataManager.mainTerritory(forCode: code)
         } else {
             defaultMetadata = nil
         }
