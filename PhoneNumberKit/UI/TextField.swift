@@ -39,6 +39,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         didSet {
             partialFormatter.defaultRegion = defaultRegion
             setRegionPlaceholderIfNeeded()
+            updateMaxDigitsIfNeeded()
         }
     }
     
@@ -57,6 +58,24 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
             placeholder = custom
         }
     }
+    
+    var isRawNumberOnly: Bool = false
+
+    internal func updateMaxDigitsIfNeeded() {
+        if isRawNumberOnly, let metadata = partialFormatter.currentMetadata {
+            guard let maxNumber = maxDigits else {
+                partialFormatter.maxDigits = nil
+                return
+            }
+            var countryCode = String(metadata.countryCode)
+            if let leadingCode = metadata.leadingDigits {
+                countryCode.append(leadingCode)
+            }
+            partialFormatter.maxDigits = maxNumber - countryCode.count
+        } else {
+            partialFormatter.maxDigits = maxDigits
+        }
+    }
 
     public var withPrefix: Bool = true {
         didSet {
@@ -72,7 +91,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
 
     public var maxDigits: Int? {
         didSet {
-            partialFormatter.maxDigits = maxDigits
+            updateMaxDigitsIfNeeded()
         }
     }
 
