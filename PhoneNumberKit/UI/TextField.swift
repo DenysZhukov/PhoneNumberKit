@@ -59,7 +59,11 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         }
     }
     
-    public var isRawNumberOnly: Bool = false
+    public var isRawNumberOnly: Bool = false {
+        didSet {
+            partialFormatter.isRawNumberOnly = isRawNumberOnly
+        }
+    }
 
     internal func updateMaxDigitsIfNeeded() {
         if isRawNumberOnly, let metadata = partialFormatter.currentMetadata {

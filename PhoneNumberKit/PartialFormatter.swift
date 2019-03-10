@@ -39,6 +39,7 @@ public final class PartialFormatter {
     }
 
     public var maxDigits: Int?
+    var isRawNumberOnly: Bool = false
 
     func updateMetadataForDefaultRegion() {
         guard let metadataManager = metadataManager else { return }
@@ -72,8 +73,9 @@ public final class PartialFormatter {
         if prefixBeforeNationalNumber.count > 0 {
             nationalNumber = extractCountryCallingCode(nationalNumber)
         }
-
-        nationalNumber = extractNationalPrefix(nationalNumber)
+        if !isRawNumberOnly {
+            nationalNumber = extractNationalPrefix(nationalNumber)
+        }
 
         if let maxDigits = maxDigits {
             let extra = nationalNumber.count - maxDigits
