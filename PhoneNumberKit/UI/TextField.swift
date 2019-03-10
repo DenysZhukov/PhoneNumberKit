@@ -66,14 +66,17 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     }
 
     internal func updateMaxDigitsIfNeeded() {
-        if isRawNumberOnly, let metadata = partialFormatter.currentMetadata {
+        if isRawNumberOnly,
+            let metadata = partialFormatter.currentMetadata {
             guard let maxNumber = maxDigits else {
                 partialFormatter.maxDigits = nil
                 return
             }
-            var countryCode = String(metadata.countryCode)
-            if let leadingCode = metadata.leadingDigits {
-                countryCode.append(leadingCode)
+            let countryCode: String
+            if let prefixRule = metadata.nationalPrefixTransformRule {
+                countryCode = (prefixRule as NSString).replacingOccurrences(of: "$", with: "")
+            } else {
+                countryCode = String(metadata.countryCode)
             }
             partialFormatter.maxDigits = maxNumber - countryCode.count
         } else {
